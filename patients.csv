@@ -1,0 +1,51 @@
+patient_id,first_name,last_name,ssn,dob,gender,address,city,state,zip,phone
+1,James,Lopez,134-33-6634,1999-11-24,Female,88743 Kara Ford Suite 592,Magnolia,ID,51751,(237) 922-6065
+2,Michael,Gonzalez,502-65-2620,1949-09-09,Female,797 Horton Rapid Suite 074,Grants,SD,18301,(618) 579-2835
+3,Elizabeth,Martinez,237-97-4896,1972-11-07,Female,93293 Norman Center Suite 431,Scobey,LA,37608,(637) 581-6240
+4,Christina,Green,878-29-5888,1975-03-29,Male,202 Elizabeth Lock,Grants,MA,80555,(853) 651-2006
+5,Timothy,Edwards,439-50-1499,1995-01-31,Male,521 Jessica Estates,International Falls,NJ,43077,(442) 283-6445
+6,Jeffery,Rojas,582-66-8920,1974-02-05,Female,7622 Allison Extensions,Fuquay-Varina,AL,88909,(205) 524-4682
+7,Angela,Drake,590-91-6843,1947-01-18,Female,8857 Hannah Brooks Suite 767,Robertsdale,ID,10138,(761) 771-2736
+8,Joseph,Stevens,187-89-7252,1939-08-07,Female,668 Johnson Crossing Apt. 138,Robertsdale,AL,94450,(228) 405-3656
+9,Kimberly,Pearson,370-47-6930,2003-02-23,Female,1473 Parks Brook,Robertsdale,VA,82021,(931) 612-8616
+10,Erica,Gray,580-11-5734,1929-02-12,Female,754 Bowers Point Apt. 128,Valley City,VT,48589,(298) 273-2851
+11,Dennis,Gross,323-49-3402,1996-10-02,Male,038 Molly Lane Apt. 490,Euclid,ID,59075,(302) 531-6897
+12,David,Brown,578-37-7784,1934-05-30,Female,19123 Mark Harbors,Wyoming,VA,64040,(396) 737-2832
+13,Alan,Davis,867-81-3585,1978-02-22,Male,4184 April Ville Suite 303,Fayetteville,MT,58731,(774) 821-9656
+14,Kimberly,Jones,682-39-2357,1973-10-13,Male,4093 Cooper Roads Suite 905,International Falls,PA,17749,(444) 420-2944
+15,Shirley,White,601-23-4153,1968-12-02,Female,7821 Huff Plains Apt. 455,Las Vegas,IN,96385,(214) 607-1579
+16,Wesley,Love,219-49-4707,1974-04-06,Male,287 Beverly Curve,Lexington,AR,75608,(614) 467-9415
+17,Haley,Taylor,179-55-3091,1930-09-07,Male,82400 Anna Islands,Robertsdale,WI,21501,(225) 498-4966
+18,Timothy,Evans,381-79-3656,1961-06-28,Female,40055 Jessica Port,Magnolia,VA,93827,(492) 846-4043
+19,Joseph,Wilcox,131-35-3816,1980-11-04,Male,171 Calvin Plains,Genesee,FL,22403,(367) 350-7111
+20,Richard,Barnett,101-40-2880,1965-09-20,Female,860 Mary Road Apt. 483,Scobey,FL,28579,(144) 879-7559
+21,Katherine,Johnson,886-66-1345,1974-01-20,Non-Binary,1983 Brian Roads Apt. 089,Nepaskiak,AL,45134,(732) 725-6100
+22,Austin,Brooks,384-85-4729,1955-07-08,Female,3635 Fischer Field,Weirton,KS,92551,(605) 272-6290
+23,Christopher,Rollins,240-62-8437,1988-10-15,Female,76763 Hicks Tunnel,Lexington,SC,79909,(115) 718-6343
+24,James,Johnson,289-45-7403,1999-06-06,Female,90151 Berry Forge,Lexington,TN,70333,(718) 666-4464
+25,Michelle,Brock,454-24-9217,1984-08-01,Female,383 Mckee Plain,Nepaskiak,AZ,29074,(712) 978-6436
+26,Dana,Moore,843-65-1592,1998-12-31,Female,2349 Christopher Vista Suite 482,Las Vegas,IL,75336,(139) 440-5690
+27,Robert,Wilson,566-55-3412,1990-10-25,Male,895 Jeffery Orchard Apt. 633,Asheville,MT,47777,(779) 853-6600
+28,Alicia,Johnson,804-91-1632,1971-09-22,Female,577 Weber Garden,Ash Flat,MA,34403,(993) 420-4204
+29,Samantha,Davis,349-97-5615,1973-11-18,Male,14863 Harris Oval Apt. 279,International Falls,LA,78845,(984) 414-3029
+30,Jessica,Yu,467-72-6819,1984-02-02,Female,67301 Stacy Gateway Apt. 076,Valley City,OH,31708,(911) 588-6358
+31,Kelly,Hall,148-55-3911,1987-05-29,Female,33727 Weaver Key,Fayetteville,WI,77022,(403) 869-1352
+32,Heather,Roberts,495-25-9932,1971-07-09,Male,3728 Yang Centers,El Reno,CT,20983,(772) 774-1356
+33,Antonio,Buck,522-92-3734,2004-02-29,Male,6380 Andrea Ford,Euclid,NE,61204,(576) 996-4868
+34,Andrea,Phillips,531-71-7625,1996-12-04,Female,4336 Smith Rapids,Genesee,KY,11807,(392) 412-3603
+35,Jennifer,Roberts,742-77-6623,2006-02-23,Male,2090 Phillip Ranch Suite 235,Magnolia,IL,37200,(255) 321-8361
+36,Manuel,Henson,664-44-6812,1995-07-06,Male,550 Brandon Junctions Suite 499,Nepaskiak,SD,67964,(785) 534-7055
+37,Benjamin,Brown,139-37-3530,1982-08-09,Male,0057 Kristin Throughway,Euclid,HI,52669,(620) 656-5285
+38,Matthew,Kirby,400-90-3971,1938-01-26,Male,6074 Brian Unions Apt. 075,Grants,OK,25458,(694) 389-5786
+39,Jonathan,Black,174-37-3739,1977-08-30,Male,59016 Jennifer Inlet,Genesee,TX,86650,(506) 754-8742
+40,Curtis,Brock,576-55-8060,1941-09-07,Female,2750 Angela Passage Suite 672,El Reno,WA,73859,(241) 644-2065
+41,Frances,Morris,854-61-8344,1979-06-02,Female,30580 Erika Dale,Nepaskiak,MA,32722,(347) 723-3123
+42,Erin,Woods,501-60-1974,1927-09-23,Male,56331 Nicholas Hollow,Nepaskiak,MO,27682,(200) 590-5987
+43,Heather,Mitchell,812-21-8044,1981-12-08,Male,2196 Strong Way Suite 706,Scobey,OK,36663,(785) 211-8734
+44,Tina,Obrien,134-62-9052,1966-08-03,Male,6422 Cynthia Fields Apt. 787,Nepaskiak,IN,78319,(616) 245-5661
+45,Brandy,Collins,164-45-3911,1983-06-17,Female,680 Smith Park Suite 645,Fuquay-Varina,MI,74757,(755) 649-2808
+46,Angela,Bowen,109-25-5287,1986-09-03,Male,24529 Timothy Well,Grants,MI,24204,(645) 234-1328
+47,Sharon,Nelson,114-82-8200,1935-04-22,Female,06742 Williams Brook Suite 371,Genesee,MN,59216,(283) 559-4188
+48,Richard,Baker,335-83-5653,1948-07-07,Male,4074 Reynolds Burgs Apt. 262,Fayetteville,OR,83758,(571) 877-6941
+49,Christina,Jordan,879-87-4776,1945-08-18,Male,623 Lisa Fork,Houma,WA,97416,(649) 416-3255
+50,Nichole,Robinson,201-19-7245,1981-02-09,Male,38454 James Rue Suite 583,Fayetteville,CT,30889,(963) 295-9455

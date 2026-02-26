@@ -1,0 +1,158 @@
+patient_id,admissions_date,diagnosis,medication,pcp
+1,2021-08-17,Type 2 Diabetes,Albuterol,Dr. Michael Brown
+1,2024-12-06,Osteoarthritis,Metformin,Dr. Karen Moore
+1,2021-10-25,Chronic Obstructive Pulmonary Disease (COPD),Levothyroxine,Dr. Laura Martinez
+2,2021-09-28,Anxiety,Losartan,Dr. Michael Brown
+2,2026-02-19,Heart Disease,Lisinopril,Dr. Laura Martinez
+2,2021-11-19,Hyperlipidemia,Lisinopril,Dr. Michael Brown
+3,2020-03-22,Depression,Losartan,Dr. Sarah Davis
+3,2021-06-30,Type 2 Diabetes,Lisinopril,Dr. James Anderson
+3,2022-04-21,Anxiety,Losartan,Dr. Sarah Davis
+4,2025-02-18,Osteoarthritis,Simvastatin,Dr. James Anderson
+4,2024-05-13,Depression,Metformin,Dr. Emily Johnson
+4,2020-06-26,Depression,Levothyroxine,Dr. James Anderson
+5,2021-10-08,Chronic Obstructive Pulmonary Disease (COPD),Atorvastatin,Dr. Linda Taylor
+5,2025-02-13,Depression,Sertraline,Dr. Robert Thomas
+5,2023-06-02,Hyperlipidemia,Losartan,Dr. Laura Martinez
+5,2020-04-19,Osteoarthritis,Lisinopril,Dr. David Wilson
+6,2026-01-27,Depression,Metformin,Dr. John Smith
+7,2023-10-08,Asthma,Omeprazole,Dr. John Smith
+7,2021-04-03,Hyperlipidemia,Atorvastatin,Dr. Emily Johnson
+8,2025-02-09,Chronic Kidney Disease,Albuterol,Dr. Laura Martinez
+8,2021-02-24,Asthma,Amlodipine,Dr. Sarah Davis
+8,2025-12-30,Type 2 Diabetes,Lisinopril,Dr. Michael Brown
+9,2020-10-31,Type 2 Diabetes,Losartan,Dr. Linda Taylor
+9,2025-08-20,Depression,Lisinopril,Dr. Emily Johnson
+10,2021-07-16,Chronic Obstructive Pulmonary Disease (COPD),Albuterol,Dr. Karen Moore
+10,2025-05-07,Osteoarthritis,Amlodipine,Dr. James Anderson
+10,2023-11-09,Osteoarthritis,Metformin,Dr. Karen Moore
+10,2023-09-22,Asthma,Omeprazole,Dr. James Anderson
+10,2022-03-06,Anxiety,Metformin,Dr. Linda Taylor
+11,2020-02-19,Heart Disease,Simvastatin,Dr. Laura Martinez
+11,2024-08-21,Chronic Kidney Disease,Omeprazole,Dr. James Anderson
+12,2022-03-29,Chronic Obstructive Pulmonary Disease (COPD),Simvastatin,Dr. James Anderson
+12,2020-05-12,Asthma,Losartan,Dr. John Smith
+13,2023-07-25,Chronic Obstructive Pulmonary Disease (COPD),Lisinopril,Dr. Robert Thomas
+13,2021-06-20,Anxiety,Metformin,Dr. Laura Martinez
+13,2023-03-08,Heart Disease,Losartan,Dr. Laura Martinez
+13,2022-11-23,Hyperlipidemia,Simvastatin,Dr. Robert Thomas
+13,2023-04-09,Depression,Albuterol,Dr. Laura Martinez
+14,2021-12-22,Anxiety,Atorvastatin,Dr. David Wilson
+15,2021-01-24,Osteoarthritis,Simvastatin,Dr. Linda Taylor
+15,2022-04-08,Depression,Atorvastatin,Dr. Karen Moore
+15,2024-04-25,Type 2 Diabetes,Losartan,Dr. Linda Taylor
+15,2021-06-28,Chronic Kidney Disease,Lisinopril,Dr. James Anderson
+16,2024-10-25,Depression,Atorvastatin,Dr. Michael Brown
+16,2021-09-28,Depression,Albuterol,Dr. James Anderson
+16,2020-09-19,Hyperlipidemia,Losartan,Dr. David Wilson
+17,2023-05-06,Depression,Lisinopril,Dr. Linda Taylor
+17,2021-12-13,Depression,Metformin,Dr. Linda Taylor
+17,2020-08-31,Chronic Kidney Disease,Losartan,Dr. James Anderson
+18,2024-07-10,Hyperlipidemia,Losartan,Dr. Laura Martinez
+18,2024-10-16,Hyperlipidemia,Simvastatin,Dr. Robert Thomas
+18,2024-11-30,Chronic Obstructive Pulmonary Disease (COPD),Omeprazole,Dr. Emily Johnson
+18,2024-11-02,Depression,Levothyroxine,Dr. Karen Moore
+19,2025-05-25,Hypertension,Sertraline,Dr. Karen Moore
+20,2020-07-16,Type 2 Diabetes,Lisinopril,Dr. Michael Brown
+20,2025-11-30,Type 2 Diabetes,Losartan,Dr. Laura Martinez
+20,2022-09-11,Osteoarthritis,Sertraline,Dr. Sarah Davis
+20,2025-01-23,Heart Disease,Levothyroxine,Dr. Sarah Davis
+21,2020-11-27,Anxiety,Lisinopril,Dr. Robert Thomas
+21,2024-03-26,Chronic Kidney Disease,Simvastatin,Dr. John Smith
+21,2022-01-20,Anxiety,Losartan,Dr. Robert Thomas
+21,2021-10-25,Osteoarthritis,Atorvastatin,Dr. Sarah Davis
+21,2021-03-03,Depression,Levothyroxine,Dr. Laura Martinez
+22,2021-12-11,Hyperlipidemia,Levothyroxine,Dr. James Anderson
+22,2020-08-12,Hyperlipidemia,Losartan,Dr. Sarah Davis
+22,2023-11-13,Hyperlipidemia,Losartan,Dr. Michael Brown
+22,2023-06-26,Asthma,Sertraline,Dr. David Wilson
+23,2023-11-02,Asthma,Metformin,Dr. Sarah Davis
+24,2024-08-09,Hypertension,Losartan,Dr. Sarah Davis
+24,2024-05-01,Chronic Obstructive Pulmonary Disease (COPD),Lisinopril,Dr. David Wilson
+24,2024-02-01,Chronic Kidney Disease,Sertraline,Dr. James Anderson
+24,2023-05-08,Asthma,Albuterol,Dr. John Smith
+24,2021-05-07,Chronic Kidney Disease,Metformin,Dr. James Anderson
+25,2023-02-17,Asthma,Simvastatin,Dr. James Anderson
+25,2023-09-27,Hypertension,Metformin,Dr. Robert Thomas
+26,2021-07-21,Osteoarthritis,Simvastatin,Dr. John Smith
+26,2024-02-27,Osteoarthritis,Losartan,Dr. Sarah Davis
+26,2023-08-01,Depression,Metformin,Dr. Sarah Davis
+26,2023-06-23,Anxiety,Lisinopril,Dr. Sarah Davis
+27,2020-09-06,Anxiety,Atorvastatin,Dr. Robert Thomas
+27,2024-10-04,Hypertension,Amlodipine,Dr. James Anderson
+27,2025-01-28,Heart Disease,Simvastatin,Dr. James Anderson
+27,2024-06-11,Heart Disease,Lisinopril,Dr. Robert Thomas
+28,2020-08-07,Hyperlipidemia,Lisinopril,Dr. Linda Taylor
+28,2020-09-25,Osteoarthritis,Simvastatin,Dr. David Wilson
+28,2025-12-30,Depression,Albuterol,Dr. Laura Martinez
+28,2023-03-03,Heart Disease,Levothyroxine,Dr. Laura Martinez
+29,2023-02-05,Type 2 Diabetes,Amlodipine,Dr. Emily Johnson
+29,2023-10-18,Asthma,Omeprazole,Dr. Emily Johnson
+30,2021-08-29,Chronic Obstructive Pulmonary Disease (COPD),Metformin,Dr. Robert Thomas
+30,2024-12-01,Osteoarthritis,Simvastatin,Dr. James Anderson
+30,2020-03-08,Hypertension,Metformin,Dr. Sarah Davis
+30,2021-07-30,Chronic Obstructive Pulmonary Disease (COPD),Lisinopril,Dr. Laura Martinez
+31,2023-07-28,Chronic Obstructive Pulmonary Disease (COPD),Lisinopril,Dr. David Wilson
+31,2021-02-03,Chronic Obstructive Pulmonary Disease (COPD),Albuterol,Dr. Laura Martinez
+31,2021-05-08,Asthma,Sertraline,Dr. Michael Brown
+31,2023-05-17,Anxiety,Amlodipine,Dr. James Anderson
+32,2023-05-30,Chronic Obstructive Pulmonary Disease (COPD),Amlodipine,Dr. James Anderson
+33,2020-07-18,Hypertension,Lisinopril,Dr. John Smith
+33,2020-09-08,Chronic Kidney Disease,Albuterol,Dr. Michael Brown
+34,2020-01-05,Type 2 Diabetes,Amlodipine,Dr. Emily Johnson
+34,2021-11-14,Chronic Obstructive Pulmonary Disease (COPD),Atorvastatin,Dr. Linda Taylor
+34,2024-07-05,Depression,Atorvastatin,Dr. David Wilson
+35,2025-05-25,Chronic Kidney Disease,Albuterol,Dr. James Anderson
+35,2024-09-04,Anxiety,Albuterol,Dr. Sarah Davis
+35,2025-04-20,Hyperlipidemia,Amlodipine,Dr. David Wilson
+35,2021-10-15,Anxiety,Lisinopril,Dr. David Wilson
+35,2022-08-30,Asthma,Sertraline,Dr. Michael Brown
+36,2025-03-03,Hypertension,Sertraline,Dr. Karen Moore
+36,2022-02-06,Osteoarthritis,Sertraline,Dr. Karen Moore
+36,2020-07-21,Asthma,Amlodipine,Dr. Robert Thomas
+36,2020-10-02,Heart Disease,Amlodipine,Dr. John Smith
+36,2023-12-24,Type 2 Diabetes,Albuterol,Dr. Sarah Davis
+37,2023-11-06,Osteoarthritis,Atorvastatin,Dr. Laura Martinez
+37,2024-01-05,Heart Disease,Atorvastatin,Dr. John Smith
+37,2023-02-24,Osteoarthritis,Albuterol,Dr. Michael Brown
+38,2020-01-29,Osteoarthritis,Albuterol,Dr. Laura Martinez
+38,2025-05-21,Chronic Kidney Disease,Lisinopril,Dr. David Wilson
+39,2025-01-14,Hyperlipidemia,Levothyroxine,Dr. Emily Johnson
+39,2021-06-23,Chronic Obstructive Pulmonary Disease (COPD),Simvastatin,Dr. John Smith
+39,2022-09-22,Heart Disease,Losartan,Dr. Laura Martinez
+40,2021-01-26,Heart Disease,Sertraline,Dr. Michael Brown
+41,2020-05-20,Hyperlipidemia,Metformin,Dr. Linda Taylor
+42,2023-12-04,Anxiety,Albuterol,Dr. Robert Thomas
+42,2023-03-18,Asthma,Sertraline,Dr. Sarah Davis
+42,2024-08-02,Chronic Obstructive Pulmonary Disease (COPD),Omeprazole,Dr. Emily Johnson
+42,2024-07-11,Heart Disease,Amlodipine,Dr. John Smith
+42,2021-06-20,Hyperlipidemia,Simvastatin,Dr. Karen Moore
+43,2022-11-18,Hypertension,Losartan,Dr. Michael Brown
+43,2024-11-04,Hyperlipidemia,Levothyroxine,Dr. Emily Johnson
+44,2024-10-08,Anxiety,Albuterol,Dr. Emily Johnson
+44,2021-09-30,Anxiety,Albuterol,Dr. James Anderson
+44,2023-08-19,Asthma,Levothyroxine,Dr. John Smith
+44,2023-07-19,Depression,Albuterol,Dr. Robert Thomas
+44,2022-05-23,Chronic Kidney Disease,Atorvastatin,Dr. Karen Moore
+45,2023-07-01,Chronic Kidney Disease,Amlodipine,Dr. Emily Johnson
+45,2022-07-09,Asthma,Amlodipine,Dr. Emily Johnson
+45,2023-08-19,Chronic Obstructive Pulmonary Disease (COPD),Atorvastatin,Dr. Emily Johnson
+45,2021-04-23,Depression,Albuterol,Dr. David Wilson
+45,2023-03-25,Asthma,Atorvastatin,Dr. Linda Taylor
+46,2021-11-07,Asthma,Levothyroxine,Dr. Karen Moore
+47,2022-03-08,Chronic Kidney Disease,Metformin,Dr. Michael Brown
+47,2021-03-24,Osteoarthritis,Sertraline,Dr. John Smith
+48,2023-09-17,Osteoarthritis,Amlodipine,Dr. Robert Thomas
+48,2020-12-27,Anxiety,Losartan,Dr. James Anderson
+48,2022-01-18,Heart Disease,Sertraline,Dr. Laura Martinez
+48,2022-01-05,Type 2 Diabetes,Levothyroxine,Dr. David Wilson
+48,2021-06-21,Asthma,Amlodipine,Dr. John Smith
+49,2021-03-05,Hypertension,Metformin,Dr. Emily Johnson
+49,2022-03-19,Asthma,Atorvastatin,Dr. Sarah Davis
+49,2024-10-20,Anxiety,Albuterol,Dr. Laura Martinez
+49,2025-07-07,Anxiety,Albuterol,Dr. Karen Moore
+49,2020-10-20,Depression,Lisinopril,Dr. Michael Brown
+50,2024-01-25,Osteoarthritis,Sertraline,Dr. Michael Brown
+50,2021-10-08,Heart Disease,Lisinopril,Dr. James Anderson
+50,2021-10-20,Chronic Kidney Disease,Lisinopril,Dr. Michael Brown
+50,2022-03-10,Chronic Obstructive Pulmonary Disease (COPD),Levothyroxine,Dr. Michael Brown
