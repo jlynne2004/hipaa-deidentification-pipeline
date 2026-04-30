@@ -34,7 +34,7 @@ Healthcare organizations routinely need to share patient data for analytics, res
 
 | Mode | Description | Best For |
 |------|-------------|----------|
-| **Audit** | Scan only — no data modified | Understanding current risk |
+| **Audit** | Scan only, no data modified | Understanding current risk |
 | **Generalize** | Reduce precision while preserving analytical value | Internal cross-team sharing |
 | **Full De-Identification** | Complete removal per HIPAA Safe Harbor | Research, public reporting |
 
