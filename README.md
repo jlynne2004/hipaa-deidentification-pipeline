@@ -1,12 +1,12 @@
 # HIPAA De-Identification Pipeline
 
-A complete, end-to-end toolkit for detecting, scoring, and removing Protected Health Information (PHI) from medical datasets — implementing the HIPAA Safe Harbor method.
+A complete, end-to-end toolkit for detecting, scoring, and removing Protected Health Information (PHI) from medical datasets by implementing the HIPAA Safe Harbor method.
 
 ---
 
 ## Overview
 
-Healthcare organizations routinely need to share patient data for analytics, research, and reporting — but doing so safely requires removing or masking the 18 HIPAA-defined identifiers that constitute PHI. This toolkit automates that process through an interactive Streamlit web application backed by a PostgreSQL RBAC architecture.
+Healthcare organizations routinely need to share patient data for analytics, research, and reporting. Doing so safely requires removing or masking the 18 HIPAA-defined identifiers that constitute PHI. This project has two components: an interactive Streamlit web application for PHI detection and de-identification, and a PostgreSQL database architecture demonstrating role-based access control (RBAC) to prevent unauthorized exposure of raw data.
 
 **The pipeline covers three layers of data governance:**
 
@@ -184,4 +184,4 @@ Names · Geographic data smaller than state · Dates (except year) · Phone numb
 
 ## Disclaimer
 
-This toolkit is intended for educational and demonstration purposes. The sample data is entirely synthetic — generated using the Faker library with no connection to real individuals. This tool does not constitute legal compliance advice. Organizations handling real PHI should consult a qualified HIPAA compliance officer.
+This toolkit is intended for educational and demonstration purposes. The sample data is entirely synthetic, generated using the Faker library with no connection to real individuals. This tool does not constitute legal compliance advice. Organizations handling real PHI should consult a qualified HIPAA compliance officer.
