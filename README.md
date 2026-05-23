@@ -8,7 +8,7 @@ A complete, end-to-end toolkit for detecting, scoring, and removing Protected He
 
 Healthcare organizations routinely need to share patient data for analytics, research, and reporting. Doing so safely requires removing or masking the 18 HIPAA-defined identifiers that constitute PHI. This project has two components: an interactive Streamlit web application for PHI detection and de-identification, and a PostgreSQL database architecture demonstrating role-based access control (RBAC) to prevent unauthorized exposure of raw data.
 
-**The pipeline covers three layers of data governance:**
+**The project demonstrates an end-to-end Data Governance Pipeline spanning four core operational phases:**
 
 1. **Detection** — Automatically scan any CSV for PHI using keyword matching and regex pattern analysis
 2. **Scoring** — Grade your dataset on a compliance scale (A–F) before and after de-identification
