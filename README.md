@@ -128,6 +128,7 @@ hipaa_deidentification_pipeline/
 ├── hipaa_deidentification_toolkit.py    # Main Streamlit application
 ├── FakePatientData.py                   # Fake patient data generator
 ├── HIPAA_De-Identification_Pipeline.sql # PostgreSQL schema and RBAC views
+├── requirements.txt					  # Python libraries to install
 │
 ├── data/
 │   ├── raw/                             # Source data with PHI (for demo only)
