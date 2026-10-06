@@ -126,9 +126,19 @@ def score_phi_compliance(phi_results: dict) -> dict:
     else:
         grade = "F"
 
+    if high_count >= 5 or deductions >= 100:
+        risk_level = "Critical"
+    elif high_count >= 2 or deductions >= 50:
+        risk_level = "High"
+    elif high_count >= 1 or deductions >= 20:
+        risk_level = "Moderate"
+    else:
+        risk_level = "Low"
+
     return {
         "score":        score,
         "grade":        grade,
+        "risk_level":   risk_level,
         "high_count":   high_count,
         "medium_count": medium_count,
         "deductions":   deductions,
@@ -190,7 +200,12 @@ def detect_phi_columns(df: pd.DataFrame, values_only: bool = False) -> dict:
         kw_hits  = [] if values_only else _keyword_hits(col)
         rgx_hits = _regex_hits(df[col])
 
-        all_types = list(dict.fromkeys(kw_hits + rgx_hits))  # preserve order, dedupe
+        # Five-digit values are ambiguous (e.g., CPT/procedure codes).
+        # Require postal context before accepting a regex-only ZIP match.
+        if "ZIP" in rgx_hits and not any(k in col.lower() for k in ("zip", "postal", "postcode")):
+            rgx_hits = [x for x in rgx_hits if x != "ZIP"]
+
+        all_types = list(dict.fromkeys(kw_hits + rgx_hits))
         methods   = (["keyword"] if kw_hits else []) + (["regex"] if rgx_hits else [])
 
         if kw_hits and rgx_hits:
@@ -284,6 +299,23 @@ def _transform_value(value, phi_types: list[str], confidence: str, mode: str = "
 
     # --- GENERALIZE MODE ---
     if mode == "Generalize":
+        # Specific identifier types take precedence over broad Name/Geographic matches.
+        if "Photo" in phi_types:
+            return "[IMAGE]"
+        if "Biometric" in phi_types:
+            return "[BIOMETRIC]"
+        if "URL" in phi_types:
+            return "[URL]"
+        if "IP Address" in phi_types:
+            parts = val.split(".")
+            return f"{parts[0]}.{parts[1]}.x.x" if len(parts) == 4 and all(p.isdigit() for p in parts) else "[IP]"
+        if "Email" in phi_types:
+            if "@" in val:
+                local, domain = val.rsplit("@", 1)
+                return f"{(local[:1] or 'x').lower()}***@{domain}"
+            return "[EMAIL]"
+        if "Vehicle ID" in phi_types or "Device ID" in phi_types or "Certificate/License" in phi_types:
+            return hashlib.sha256(val.encode()).hexdigest()[:12]
         if "SSN" in phi_types:
             digits = re.sub("[^0-9]", "", val)
             return f"XXX-XX-{digits[-4:]}" if len(digits) >= 4 else "XXX-XX-XXXX"
@@ -304,7 +336,7 @@ def _transform_value(value, phi_types: list[str], confidence: str, mode: str = "
                 return val  # preserve city in Generalize mode
             return "REDACTED"
         if any(t in phi_types for t in ("Unique ID", "Health Plan ID", "Medical Record #", "Account Number")):
-            return hashlib.sha256(val.encode()).hexdigest()[:8]  # Short hash for generalization
+            return hashlib.sha256(val.encode()).hexdigest()[:12]  # Deterministic pseudonymous ID
         return value
 
     # --- MASK MODE ---
@@ -413,21 +445,33 @@ def deidentify_dataframe(df: pd.DataFrame, phi_results: dict, mode: str = "Safe 
 def _describe_transformation(phi_types: list[str], mode: str, col_name: str) -> str:
     if mode == "Audit":
         if "SSN" in phi_types:
-            return "SSN detected. Recommend masking to XXX-XX-last4."
+            return "SSN detected. Safe Harbor requires removal of Social Security numbers."
         if "Name" in phi_types:
-            return "Name detected. Recommend redacting or generalizing."
+            return "Name detected. Safe Harbor requires removal of names."
         if "Date" in phi_types:
-            return "Date detected. Recommend generalizing to year only."
+            return "Date detected. Safe Harbor generally permits year-only treatment; ages over 89 and related date information require 90+ aggregation."
         if "Phone/Fax" in phi_types:
-            return "Phone detected. Recommend masking to ###-###-last4."
+            return "Phone/Fax detected. Safe Harbor requires removal of telephone and fax numbers."
         if "ZIP" in phi_types:
-            return "ZIP detected. Recommend truncating to first 3 digits."
+            return "ZIP detected. Safe Harbor permits an eligible 3-digit prefix only when the population rule is satisfied; otherwise use 000."
         if "Geographic" in phi_types:
-            return "Geographic data detected. Recommend redacting."
-        return "PHI detected. Recommend de-identification before sharing."
+            return "Geographic data detected. Safe Harbor requires removal of geographic subdivisions below state, subject to the ZIP rule."
+        return "Potential PHI detected. Review the identifier against Safe Harbor requirements and remove it before disclosure when applicable."
 
     if mode == "Generalize":
         details = []
+        if "Photo" in phi_types:
+            details.append("Replace image reference with [IMAGE]")
+        if "Biometric" in phi_types:
+            details.append("Replace biometric identifier with [BIOMETRIC]")
+        if "URL" in phi_types:
+            details.append("Replace URL with [URL]")
+        if "IP Address" in phi_types:
+            details.append("Generalize IP to first two octets")
+        if "Email" in phi_types:
+            details.append("Mask email local-part while retaining domain")
+        if any(t in phi_types for t in ("Certificate/License", "Vehicle ID", "Device ID")):
+            details.append("Replace identifier with deterministic truncated hash")
         if "SSN" in phi_types:
             details.append("Generalize SSN to partial (e.g., XXX-XX-1234)")
         if "Phone/Fax" in phi_types:
@@ -661,7 +705,7 @@ if uploaded_file is not None:
             st.write(", ".join(clean.keys()))
 
     # --- PHI Risk Scoring ---
-    st.subheader("PHI Risk Score")
+    st.subheader("PHI Risk Assessment")
 
     compliance = score_phi_compliance(phi_results)
     score = compliance["score"]
@@ -706,7 +750,7 @@ if uploaded_file is not None:
             f"- **{compliance['medium_count']}** medium-risk column(s) &nbsp;→&nbsp; "
             f"−{compliance['medium_count'] * 5} pts &nbsp;*(5 pts each)*"
         )
-        st.markdown(f"- **Total deducted:** {compliance['deductions']} pts")
+        st.markdown(f"- **Raw risk deductions:** {compliance['deductions']} pts *(score floors at 0)*")
 
     banner(status_msg)
 
