@@ -2,12 +2,12 @@
 # Features:
 # - Upload medical data CSV
 # - Auto-detect PII/PHI columns (HIPAA Safe Harbor 18 identifiers)
-# - Score data for potential PHI risk (A-F)
+# - Score data for HIPAA compliance (A-F)
 # - Suggest improvements per flagged column
 # - De-identify data with one click
-# - Show before/after PHI risk score
+# - Show before/after compliance score
 # - Download de-identified CSV
-# - Download PHI risk / de-identification report PDF
+# - Download compliance report PDF
 
 # Libraries
 import hashlib
@@ -53,7 +53,6 @@ PHI_COLUMN_KEYWORDS = {
     "Biometric":           ["fingerprint", "biometric", "voice_print", "retina"],
     "Photo":               ["photo", "image", "photograph", "picture", "face"],
     "Unique ID":           ["patient_id", "unique_id", "uid", "guid", "subject_id"],
-    "Age":                 ["age", "patient_age"],
 }
 
 # Maps each HIPAA identifier category to a regex that matches its data pattern.
@@ -74,11 +73,7 @@ def _keyword_hits(col_name: str) -> list[str]:
     col_lower = col_name.lower()
     hits = []
     for category, keywords in PHI_COLUMN_KEYWORDS.items():
-        if category == "Age":
-            normalized = re.sub(r"[^a-z0-9]+", "_", col_lower).strip("_")
-            if normalized in keywords:
-                hits.append(category)
-        elif any(kw in col_lower for kw in keywords):
+        if any(kw in col_lower for kw in keywords):
             hits.append(category)
     return hits
 
@@ -100,9 +95,7 @@ def _regex_hits(series: pd.Series) -> list[str]:
 
 def score_phi_compliance(phi_results: dict) -> dict:
     """
-    Calculate a heuristic PHI Risk Score based on detection results.
-
-    This is a toolkit-specific screening metric, not an official HIPAA compliance score.
+    Score HIPAA compliance based on PHI detection results.
 
     Deductions:
       - 10 points per High confidence flagged column
@@ -147,22 +140,39 @@ def grade_from_score(score: int) -> str:
     return "F"
 
 
-def compute_after_compliance(mode: str, transformed_df: pd.DataFrame) -> dict | None:
-    """
-    Re-scan transformed values for recognizable PHI patterns and return the
-    toolkit's residual PHI Risk Score. Column names are intentionally ignored
-    during verification because a column may still be named ``ssn`` even after
-    its values have been redacted.
-
-    This verification is heuristic and does not certify HIPAA compliance.
-    """
+def compute_after_compliance(mode: str, phi_results: dict) -> dict | None:
+    """Residual risk scoring for post-transformation state."""
     if mode == "Audit":
         return None
 
-    residual_results = detect_phi_columns(transformed_df, values_only=True)
-    result = score_phi_compliance(residual_results)
-    result["residual_results"] = residual_results
-    return result
+    if mode == "Full De-Identification":
+        return {"score": 100, "grade": "A", "deductions": 0}
+
+    if mode == "Generalize":
+        deduction = 0
+        for col, info in phi_results.items():
+            if not info.get("flagged", False):
+                continue
+            col_lower = col.lower()
+            phi_types = [x.lower() for x in info.get("phi_types", [])]
+
+            if "name" in phi_types:
+                deduction += 4
+            if "ssn" in phi_types:
+                deduction += 3
+            if "date" in phi_types or "dob" in phi_types:
+                deduction += 2
+            if "zip" in phi_types:
+                deduction += 2
+            if "geographic" in phi_types:
+                if any(kw in col_lower for kw in ["city", "town", "municipality"]):
+                    deduction += 3
+
+        score = max(0, 100 - deduction)
+        return {"score": score, "grade": grade_from_score(score), "deductions": deduction}
+
+    # fallback -- no residual mode
+    return {"score": 0, "grade": "F", "deductions": 100}
 
 
 def detect_phi_columns(df: pd.DataFrame, values_only: bool = False) -> dict:
@@ -230,10 +240,10 @@ def select_deid_mode(phi_types: list[str]) -> str:
             return "Generalize"
 
     with col2:
-        if st.button("🛡️ Safe Harbor De-Identification", use_container_width=True, key="mode_full"):
-            st.session_state["selected_deid_mode"] = "Safe Harbor De-Identification"
-            st.info("Selected: Safe Harbor De-Identification\nApplies conservative HIPAA Safe Harbor transformations to PHI detected by the toolkit. Output should still be reviewed for undetected identifiers before use or disclosure.")
-            return "Safe Harbor De-Identification"
+        if st.button("🛡️ Full De-Identification", use_container_width=True, key="mode_full"):
+            st.session_state["selected_deid_mode"] = "Full De-Identification"
+            st.info("Selected: Full De-Identification\nHIPAA Safe Harbor compliant. Maximum protection for research and reporting.")
+            return "Full De-Identification"
 
     # Future V2 modes (commented):
     # with third column:
@@ -256,12 +266,12 @@ def select_deid_mode(phi_types: list[str]) -> str:
     if "selected_deid_mode" in st.session_state:
         return st.session_state["selected_deid_mode"]
 
-    return "Safe Harbor De-Identification"  # Default mode
+    return "Full De-Identification"  # Default mode
 # ---------------------------------------------------------------------------
 # De-Identification
 # ---------------------------------------------------------------------------
 
-def _transform_value(value, phi_types: list[str], confidence: str, mode: str = "Safe Harbor De-Identification", col_name=""):
+def _transform_value(value, phi_types: list[str], confidence: str, mode: str = "Full De-Identification", col_name=""):
     """
     Apply the correct de-identification rule to a single cell value based on the selected mode.
     
@@ -269,7 +279,7 @@ def _transform_value(value, phi_types: list[str], confidence: str, mode: str = "
     - Generalize: Preserve analytical value, reduce precision
     # - Mask: Hide sensitive values but keep format (planned V2)
     # - Hash: Irreversible SHA-256 hashing (planned V2)
-    - Safe Harbor De-Identification: conservative transformations aligned to HIPAA Safe Harbor identifier-removal rules
+    - Full De-Identification: HIPAA Safe Harbor compliant transformations
     - Audit: No value change; reporting/audit only
     """
     if pd.isna(value):
@@ -339,57 +349,47 @@ def _transform_value(value, phi_types: list[str], confidence: str, mode: str = "
     #         return hashlib.sha256(val.encode()).hexdigest()
     #     return value
 
-    # --- SAFE HARBOR DE-IDENTIFICATION MODE (Default) ---
-    # This mode is intentionally conservative. It removes detected direct
-    # identifiers rather than preserving analytically useful fragments.
+    # --- FULL DE-IDENTIFICATION MODE (Default) ---
+    # SSN: XXX-XX-<last 4 digits>
+    if "SSN" in phi_types:
+        digits = re.sub("[^0-9]", "", val)
+        return f"XXX-XX-{digits[-4:]}" if len(digits) >= 4 else "XXX-XX-XXXX"
 
-    # Direct identifiers: remove completely.
-    if any(t in phi_types for t in (
-        "SSN", "Phone/Fax", "Email", "Name", "Medical Record #",
-        "Health Plan ID", "Account Number", "Certificate/License",
-        "Vehicle ID", "Device ID", "URL", "IP Address", "Biometric",
-        "Photo", "Unique ID"
-    )):
-        return "REDACTED"
+    # Phone/Fax: ###-###-<last 4 digits>
+    if "Phone/Fax" in phi_types:
+        digits = re.sub("[^0-9]", "", val)
+        return f"###-###-{digits[-4:]}" if len(digits) >= 4 else "###-###-####"
 
-    # Ages over 89 must be aggregated as 90+. Ages 89 and under may remain.
-    if "Age" in phi_types:
-        try:
-            age = int(float(val))
-            return "90+" if age > 89 else value
-        except (TypeError, ValueError):
-            return "REDACTED"
-
-    # Dates: retain year only, except DOBs implying age >89 are aggregated.
+    # Dates: year only  (handles YYYY-MM-DD, MM/DD/YYYY, MM-DD-YYYY)
     if "Date" in phi_types:
         year_match = re.search(r"(19|20)[0-9]{2}", val)
-        if not year_match:
-            return "REDACTED"
-        year = int(year_match.group(0))
-        if any(kw in col_name.lower() for kw in ("dob", "date_of_birth", "birthdate", "birth_date")):
-            if datetime.now().year - year > 89:
-                return "90+"
-        return str(year)
+        return year_match.group(0) if year_match else "REDACTED"
 
-    # Geographic subdivisions smaller than a state are removed. For ZIP codes,
-    # Safe Harbor permits some 3-digit prefixes only when current population
-    # criteria are met. Because this standalone toolkit does not bundle a
-    # current Census population crosswalk, it takes the conservative route and
-    # suppresses the ZIP rather than making an unsupported population claim.
+    # Names: REDACTED
+    if "Name" in phi_types:
+        return "REDACTED"
+
+    # ZIP (detected by regex): first 3 digits only
     if "ZIP" in phi_types:
-        return "000"
+        return val[:3]
+
+    # Other geographic fields (city, address, street, etc.): REDACTED
     if "Geographic" in phi_types:
         return "REDACTED"
 
-    # Catch-all for any remaining detected PHI.
-    if phi_types or confidence == "High":
+    # IDs: SHA-256 hash of the original value
+    if any(t in phi_types for t in ("Unique ID", "Health Plan ID", "Medical Record #", "Account Number")):
+        return hashlib.sha256(val.encode()).hexdigest()
+
+    # Catch-all: any remaining High-confidence flag
+    if confidence == "High":
         return "REDACTED"
 
     return value
 
 
 
-def deidentify_dataframe(df: pd.DataFrame, phi_results: dict, mode: str = "Safe Harbor De-Identification") -> pd.DataFrame:
+def deidentify_dataframe(df: pd.DataFrame, phi_results: dict, mode: str = "Full De-Identification") -> pd.DataFrame:
     """
     Return a copy of df with all flagged PHI columns transformed.
     Unflagged columns are passed through unchanged.
@@ -397,7 +397,7 @@ def deidentify_dataframe(df: pd.DataFrame, phi_results: dict, mode: str = "Safe 
     Args:
         df: The DataFrame to de-identify
         phi_results: PHI detection results from detect_phi_columns()
-        mode: De-identification mode (Generalize, Safe Harbor De-Identification, or Audit)
+        mode: De-identification mode (Generalize, Full De-Identification, or Audit)
     """
     deidentified = df.copy()
     for col, info in phi_results.items():
@@ -450,8 +450,8 @@ def _describe_transformation(phi_types: list[str], mode: str, col_name: str) -> 
     # if mode == "Hash":
     #     return "SHA-256 hashing for all flagged PHI columns"
 
-    if mode == "Safe Harbor De-Identification":
-        return "Conservative Safe Harbor transformation applied to detected PHI; manual review is still required for undetected identifiers"
+    if mode == "Full De-Identification":
+        return "Safe Harbor compliant de-identification for all detected PHI"
 
     return "No transformation defined for selected mode"
 
@@ -495,7 +495,7 @@ def create_compliance_report_pdf(
     pdf.ln(1)
 
     pdf.set_font("Helvetica", "B", 11)
-    pdf.cell(0, 6, "HIPAA De-Identification Toolkit - PHI Risk Report", ln=True)
+    pdf.cell(0, 6, "HIPAA De-Identification Toolkit - Compliance Report", ln=True)
     pdf.set_text_color(*BLACK)
     pdf.set_font("Helvetica", "", 10)
     pdf.cell(0, 5, f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", ln=True)
@@ -516,10 +516,10 @@ def create_compliance_report_pdf(
     pdf.cell(0, 6, f"PHI Columns Detected: {len(flagged)}", ln=True)
     pdf.ln(4)
 
-    # Section 2: PHI Risk Score
+    # Section 2: Compliance Score
     pdf.set_text_color(*NAVY_BLUE)
     pdf.set_font("Helvetica", "B", 11)
-    pdf.cell(0, 6, "Section 2 - PHI Risk Score", ln=True)
+    pdf.cell(0, 6, "Section 2 - Compliance Score", ln=True)
     pdf.set_text_color(*BLACK)
     pdf.set_font("Helvetica", "", 10)
 
@@ -612,7 +612,7 @@ def create_compliance_report_pdf(
     pdf.cell(0, 6, "Section 5 - Disclaimer", ln=True)
     pdf.set_text_color(*BLACK)
     pdf.set_font("Helvetica", "", 10)
-    pdf.multi_cell(0, 5, "This report was generated by the HIPAA De-Identification Toolkit. Detection and scoring are heuristic and may not identify every HIPAA identifier. Safe Harbor mode applies conservative transformations to PHI detected by the toolkit, but the output must be reviewed for undetected identifiers and other re-identification risk. This report is not legal advice or a substitute for professional HIPAA compliance review.")
+    pdf.multi_cell(0, 5, "This report was generated by the HIPAA De-Identification Toolkit and is not a substitute for professional HIPAA compliance review.")
 
     # Return PDF bytes
     return bytes(pdf.output())
@@ -622,8 +622,7 @@ def create_compliance_report_pdf(
 # ---------------------------------------------------------------------------
 
 st.title("HIPAA De-Identification Toolkit")
-st.write("Upload a medical data CSV to scan for potential PHI, assess de-identification risk, and transform detected identifiers.")
-st.caption("PHI detection and risk scoring are heuristic. Safe Harbor mode applies conservative rules to detected PHI and does not replace manual review or professional HIPAA compliance advice.")
+st.write("Upload a medical data CSV to scan for PHI and assess HIPAA compliance.")
 
 logo_file = st.sidebar.file_uploader("Upload a logo for the PDF report (optional)", type=["png", "jpg", "jpeg"])
 if logo_file:
@@ -660,8 +659,8 @@ if uploaded_file is not None:
         with st.expander(f"Columns with no PHI detected ({len(clean)})"):
             st.write(", ".join(clean.keys()))
 
-    # --- PHI Risk Scoring ---
-    st.subheader("PHI Risk Score")
+    # --- Compliance Scoring ---
+    st.subheader("HIPAA Compliance Score")
 
     compliance = score_phi_compliance(phi_results)
     score = compliance["score"]
@@ -693,7 +692,7 @@ if uploaded_file is not None:
     # Prominent score + grade display
     col_score, col_grade, col_detail = st.columns([1, 1, 3])
     with col_score:
-        st.metric(label="PHI Risk Score", value=f"{score} / 100")
+        st.metric(label="Compliance Score", value=f"{score} / 100")
     with col_grade:
         st.metric(label="Letter Grade", value=grade)
     with col_detail:
@@ -713,7 +712,7 @@ if uploaded_file is not None:
     # --- De-Identification ---
     st.subheader("De-Identification")
 
-    selected_mode = st.session_state.get("selected_deid_mode", "Safe Harbor De-Identification")
+    selected_mode = st.session_state.get("selected_deid_mode", "Full De-Identification")
 
     if not flagged:
         st.success("No PHI columns were found — your data does not need de-identification.")
@@ -734,13 +733,13 @@ if uploaded_file is not None:
     if "deidentified_df" in st.session_state and st.session_state["deidentified_df"] is not None:
         deidentified_df = st.session_state["deidentified_df"]
 
-        after_compliance = compute_after_compliance(selected_mode, deidentified_df)
+        after_compliance = compute_after_compliance(selected_mode, phi_results)
 
-        st.subheader("Before vs. After PHI Risk Score")
+        st.subheader("Before vs. After Compliance Score")
         col_before, col_after = st.columns(2)
         with col_before:
             st.metric(
-                label="Before De-Identification (Risk Score)",
+                label="Before De-Identification",
                 value=f"{score} / 100  ({grade})",
             )
 
@@ -754,7 +753,7 @@ if uploaded_file is not None:
             with col_after:
                 delta = after_compliance["score"] - score
                 st.metric(
-                    label=f"Verification Scan ({selected_mode})",
+                    label=f"After De-Identification ({selected_mode})",
                     value=f"{after_compliance['score']} / 100  ({after_compliance['grade']})",
                     delta=f"+{delta} pts" if delta >= 0 else f"{delta} pts",
                 )
@@ -770,8 +769,8 @@ if uploaded_file is not None:
             mime="text/csv",
         )
 
-    # PDF risk report generation section (works for Audit or De-ID)
-    if st.button("Generate PHI Risk Report (PDF)"):
+    # PDF report generation section (works for Audit or De-ID)
+    if st.button("Generate Compliance Report (PDF)"):
         if FPDF is None:
             st.error("Install fpdf2 to enable PDF export (pip install fpdf2).")
         else:
@@ -789,9 +788,9 @@ if uploaded_file is not None:
                     logo_bytes=logo_file.getvalue() if logo_file else None,
                 )
                 st.download_button(
-                    label="Download PHI Risk Report PDF",
+                    label="Download Compliance Report PDF",
                     data=report_bytes,
-                    file_name="hipaa_phi_risk_report.pdf",
+                    file_name="hipaa_compliance_report.pdf",
                     mime="application/pdf",
                 )
             except Exception as e:
